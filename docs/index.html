@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anima Locus - Soul of the Place</title>
+    <meta name="description" content="Sensor-driven musical instrument combining mmWave radar, E-field sensing, and environmental awareness. An artistic exploration of human-computer collaboration.">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>Anima Locus</h1>
+                <p class="tagline">Soul of the Place</p>
+            </div>
+            <nav>
+                <a href="#about">About</a>
+                <a href="#architecture">Architecture</a>
+                <a href="#repos">Repositories</a>
+                <a href="#philosophy">Philosophy</a>
+                <a href="https://musubiaccord.org">Musubi Accord</a>
+            </nav>
+        </header>
+
+        <section class="hero">
+            <div class="hero-content">
+                <h2>A Sensor-Driven Musical Instrument</h2>
+                <p class="hero-description">
+                    Anima Locus translates environmental presence into sound through mmWave radar, 
+                    electric field sensing, and atmospheric awareness. It's an exploration of how 
+                    technology can serve authentic artistic expression.
+                </p>
+                <div class="hero-buttons">
+                    <a href="https://github.com/yargnad/hw" class="btn btn-primary">Hardware Designs</a>
+                    <a href="https://github.com/yargnad/mcu-stm32" class="btn btn-secondary">Firmware</a>
+                    <a href="#repos" class="btn btn-tertiary">All Repositories</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section">
+            <h2>What is Anima Locus?</h2>
+            <div class="content-grid">
+                <div class="card">
+                    <h3>🎵 Musical Instrument</h3>
+                    <p>
+                        Not a controller, but an instrument. Anima Locus responds to presence, 
+                        movement, and environmental conditions through granular synthesis, 
+                        spectral processing, and multi-sampling.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>🤖 Human-Computer Collaboration</h3>
+                    <p>
+                        Hybrid architecture: Linux handles creative computation (audio engines, ML), 
+                        while the STM32 MCU provides deterministic sensor scanning and real-time control.
+                    </p>
+                </div>
+                <div class="card">
+                    <h3>🔓 Open & Protected</h3>
+                    <p>
+                        Hardware under CERN-OHL-S v2 (strongly reciprocal), software under AGPLv3 
+                        (network copyleft). Built to be shared, not captured.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture" class="section section-dark">
+            <h2>Architecture</h2>
+            <div class="architecture-overview">
+                <div class="arch-layer">
+                    <h3>Sensing Layer</h3>
+                    <ul>
+                        <li><strong>mmWave Radar (60-64 GHz)</strong> - Position, velocity, presence</li>
+                        <li><strong>E-Field (MGC3130)</strong> - Gesture recognition, approach detection</li>
+                        <li><strong>ToF Depth (VL53L5CX)</strong> - Multi-zone distance mapping</li>
+                        <li><strong>Environmental</strong> - Temperature, humidity, CO₂, air quality</li>
+                        <li><strong>Microphones</strong> - Beamforming arrays for spatial audio</li>
+                    </ul>
+                </div>
+                <div class="arch-layer">
+                    <h3>Processing Layer</h3>
+                    <ul>
+                        <li><strong>STM32U585 MCU</strong> - Deterministic sensor scanning, tinyML inference</li>
+                        <li><strong>NXP i.MX 93 (Linux)</strong> - Audio engines, sensor fusion, ML models</li>
+                        <li><strong>Link Protocol</strong> - Binary message passing between MCU and Linux</li>
+                    </ul>
+                </div>
+                <div class="arch-layer">
+                    <h3>Audio Layer</h3>
+                    <ul>
+                        <li><strong>Granular Engine</strong> - Grain synthesis with sensor modulation</li>
+                        <li><strong>Spectral Engine</strong> - FFT freeze, bin masking, partials emphasis</li>
+                        <li><strong>Multi-Sampler</strong> - Polyphonic triggering, ADSR envelopes</li>
+                        <li><strong>Effects Pipeline</strong> - Reverb, delay, distortion, filters</li>
+                        <li><strong>Nutube Stage</strong> - Optional analog warmth (6P1 triode)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="repos" class="section">
+            <h2>Repositories</h2>
+            <p class="section-intro">
+                Anima Locus is organized as a multi-repo project. Each component is independently 
+                versioned and licensed for maximum flexibility.
+            </p>
+            <div class="repos-grid">
+                <div class="repo-card">
+                    <div class="repo-header">
+                        <h3><a href="https://github.com/yargnad/hw">hw/</a></h3>
+                        <span class="license">CERN-OHL-S v2</span>
+                    </div>
+                    <p>
+                        Hardware designs: KiCad schematics, PCB layouts, BOM, assembly instructions. 
+                        4-layer PCB with sensor integration and optional Nutube analog stage.
+                    </p>
+                    <div class="repo-links">
+                        <a href="https://github.com/yargnad/hw">Repository →</a>
+                    </div>
+                </div>
+
+                <div class="repo-card">
+                    <div class="repo-header">
+                        <h3><a href="https://github.com/yargnad/mcu-stm32">mcu-stm32/</a></h3>
+                        <span class="license">AGPLv3</span>
+                    </div>
+                    <p>
+                        STM32U585 firmware: Sensor drivers, ISR/DMA architecture, tinyML models, 
+                        link protocol implementation. Real-time deterministic control.
+                    </p>
+                    <div class="repo-links">
+                        <a href="https://github.com/yargnad/mcu-stm32">Repository →</a>
+                    </div>
+                </div>
+
+                <div class="repo-card">
+                    <div class="repo-header">
+                        <h3><a href="https://github.com/yargnad/engine-ui">engine-ui/</a></h3>
+                        <span class="license">AGPLv3</span>
+                    </div>
+                    <p>
+                        Audio engines, sensor fusion, WebSocket/REST API, Conductor UI. 
+                        Python-based with FastAPI, JACK/PipeWire audio backend.
+                    </p>
+                    <div class="repo-links">
+                        <a href="https://github.com/yargnad/engine-ui">Repository →</a>
+                    </div>
+                </div>
+
+                <div class="repo-card">
+                    <div class="repo-header">
+                        <h3><a href="https://github.com/yargnad/sdk-py">sdk-py/</a></h3>
+                        <span class="license">AGPLv3</span>
+                    </div>
+                    <p>
+                        Python SDK: Typed client library for WebSocket and REST APIs. 
+                        Async-first design, CLI tools, full type hints for mypy strict mode.
+                    </p>
+                    <div class="repo-links">
+                        <a href="https://github.com/yargnad/sdk-py">Repository →</a>
+                    </div>
+                </div>
+
+                <div class="repo-card">
+                    <div class="repo-header">
+                        <h3><a href="https://github.com/yargnad/sdk-ts">sdk-ts/</a></h3>
+                        <span class="license">AGPLv3</span>
+                    </div>
+                    <p>
+                        TypeScript SDK: Browser and Node.js client with React hooks. 
+                        Strict TypeScript, WebSocket auto-reconnect, type-safe event emitters.
+                    </p>
+                    <div class="repo-links">
+                        <a href="https://github.com/yargnad/sdk-ts">Repository →</a>
+                    </div>
+                </div>
+
+                <div class="repo-card">
+                    <div class="repo-header">
+                        <h3><a href="https://github.com/yargnad/docs-site">docs-site/</a></h3>
+                        <span class="license">AGPLv3 / CC BY-SA 4.0</span>
+                    </div>
+                    <p>
+                        Comprehensive documentation: Getting started, hardware assembly, 
+                        API reference, performance tuning. VitePress-based static site.
+                    </p>
+                    <div class="repo-links">
+                        <a href="https://github.com/yargnad/docs-site">Repository →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="philosophy" class="section section-dark">
+            <h2>Philosophy: Team Hybrid</h2>
+            <div class="philosophy-content">
+                <p class="philosophy-intro">
+                    Anima Locus embodies <strong>Team Hybrid</strong>: humans and computers working 
+                    together, each doing what they do best. Not AI replacing humans, but technology 
+                    augmenting authentic human expression.
+                </p>
+                <div class="philosophy-grid">
+                    <div class="philosophy-card">
+                        <h3>What Computers Do</h3>
+                        <ul>
+                            <li>Deterministic sensor scanning</li>
+                            <li>Low-latency signal processing</li>
+                            <li>Pattern recognition (ML)</li>
+                            <li>Precise timing and control</li>
+                        </ul>
+                    </div>
+                    <div class="philosophy-card">
+                        <h3>What Humans Do</h3>
+                        <ul>
+                            <li>Creative intent and expression</li>
+                            <li>Musical interpretation</li>
+                            <li>Emotional context</li>
+                            <li>Aesthetic judgment</li>
+                        </ul>
+                    </div>
+                </div>
+                <p class="philosophy-outro">
+                    This project is part of <a href="https://rebellion.musubiaccord.org">The Authentic Rebellion Framework</a> 
+                    — a movement toward technology that serves humanity, not extractive systems.
+                </p>
+            </div>
+        </section>
+
+        <section class="section cta-section">
+            <h2>Get Involved</h2>
+            <p>
+                Anima Locus is open source and welcomes contributions. Whether you're interested 
+                in hardware design, embedded systems, audio DSP, or documentation, there's a place 
+                for you.
+            </p>
+            <div class="cta-buttons">
+                <a href="https://github.com/yargnad" class="btn btn-primary">View on GitHub</a>
+                <a href="https://rebellion.musubiaccord.org" class="btn btn-secondary">The Authentic Rebellion</a>
+                <a href="https://musubiaccord.org" class="btn btn-tertiary">Musubi Accord</a>
+            </div>
+        </section>
+
+        <footer>
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Anima Locus</h4>
+                    <p>Sensor-driven musical instrument exploring human-computer collaboration.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Licenses</h4>
+                    <p>
+                        Hardware: <a href="https://cern-ohl.web.cern.ch/">CERN-OHL-S v2</a><br>
+                        Software: <a href="https://www.gnu.org/licenses/agpl-3.0.html">AGPLv3</a><br>
+                        Documentation: <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>
+                    </p>
+                </div>
+                <div class="footer-section">
+                    <h4>Related Projects</h4>
+                    <p>
+                        <a href="https://rebellion.musubiaccord.org">The Authentic Rebellion</a><br>
+                        <a href="https://musubiaccord.org">Musubi Accord</a><br>
+                        <a href="https://whetstone.musubiaccord.org">The Whetstone</a>
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Ken Tsugi. Open source, open hardware, open future.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
