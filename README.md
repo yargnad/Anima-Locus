@@ -2,7 +2,16 @@
 
 **"Soul of the Place"**
 
-An open, sensor-driven musical instrument that fuses mid-air conductor gestures and environmental sensing into a digital instrument with an analog post stage.
+A **living and breathing digital spectral/granular keyboard synthesizer** that fuses gestural control, environmental sensing, and vacuum tube analog warmth into a single expressive instrument.
+
+**What makes it alive:**
+- **Gestural interaction** via mid-air radar, E-field proximity, and depth sensing—conduct sound with your hands
+- **Environmental awareness** through temperature, humidity, CO₂, and light sensors—the instrument responds to its surroundings
+- **Spectral/granular synthesis** engines running on embedded Linux for deep sound design
+- **Vacuum tube output stage** (Nutube 6P1) adds organic harmonic character
+- **Real-time sensor fusion** on dedicated microcontroller ensures deterministic, low-latency response
+
+This is not a traditional MIDI controller—it's an instrument that breathes with you and adapts to its environment.
 
 ---
 
@@ -23,10 +32,12 @@ This workspace coordinates six independent repositories:
 
 ### 3. **[engine-ui/](./engine-ui/)** - Audio Engine & User Interface
 - **License:** AGPLv3
-- Linux audio engines (granular/spectral/sampler)
-- Sensor fusion services
+- **Spectral synthesis engine:** FFT-based spectral processing, freeze, morph
+- **Granular synthesis engine:** Multi-grain clouds, time-stretching, pitch-shifting
+- **Sampler engine:** One-shot and looping playback with envelope control
+- Sensor fusion services (gesture → synthesis parameter mapping)
 - WebSocket/REST API server
-- Conductor HUD interface
+- Conductor HUD interface (real-time visual feedback)
 
 ### 4. **[sdk-py/](./sdk-py/)** - Python SDK
 - **License:** AGPLv3
@@ -71,12 +82,40 @@ This workspace coordinates six independent repositories:
 - Thermal imaging
 - Ambient light sensor (ALS)
 
-**Audio Post:**
-- Optional Nutube stage for harmonic sheen
+**Analog Audio Path:**
+- **Nutube 6P1 vacuum tube buffer** (real triode, analog harmonic saturation)
+- Provides 2nd/3rd harmonic warmth and compression
+- The "living" element—organic, non-linear response
 
 ---
 
-## Architecture Principles
+## The "Living and Breathing" Philosophy
+
+Anima‑Locus is designed to feel **alive** through:
+
+1. **Environmental Responsiveness**
+   - Temperature, humidity, air quality, and light levels subtly modulate synthesis parameters
+   - Long slew rates and hysteresis prevent jarring changes—the instrument "breathes" slowly
+   - Creates evolving soundscapes that change with the room's atmosphere
+
+2. **Gestural Intimacy**
+   - Hands-free control via mmWave radar (60–64 GHz) tracks baton/hand movements in 3D space
+   - Near-surface E-field sensing (MGC3130) detects proximity and gesture intention
+   - ToF depth imaging adds precise distance control
+   - Multiple mic arrays provide spatial awareness and voice/sound triggering
+
+3. **Organic Analog Stage**
+   - Real vacuum tube (Nutube 6P1) adds harmonic complexity impossible with digital processing
+   - Non-linear saturation responds dynamically to playing intensity
+   - The "warmth" is not emulation—it's physics
+
+4. **Hybrid Architecture**
+   - Digital precision for spectral/granular engines (Linux on quad-core ARM)
+   - Real-time determinism for sensor fusion (STM32 MCU with dedicated ISRs)
+   - Analog warmth for final output (vacuum tube buffer)
+   - "As analog as possible using digital parts"—the best of both worlds
+
+---
 
 ### API-First Design
 - Stable, versioned JSON over WebSocket (real-time control)
@@ -176,7 +215,8 @@ See also:
 
 - **Deterministic control loop** on MCU (never block ISR)
 - **Rate-limited, debounced** sensor reads
-- **Long-slew, hysteretic** environmental mapping
+- **Long-slew, hysteretic** environmental parameter mapping (smooth, organic evolution)
+- **Bounded impact** on pitch/brightness/envelopes (environmental changes enhance, don't dominate)
 - **USB device multiplicity** (treat each USB device independently)
 - **Security:** Minimal dependencies, no secrets in repo, reproducible builds, SBOM generation
 
