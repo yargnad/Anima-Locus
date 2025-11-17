@@ -6,12 +6,13 @@ A **living and breathing digital spectral/granular keyboard synthesizer** that f
 
 **What makes it alive:**
 - **Gestural interaction** via mid-air radar, E-field proximity, and depth sensing—conduct sound with your hands
-- **Environmental awareness** through temperature, humidity, CO₂, and light sensors—the instrument responds to its surroundings
+- **Environmental awareness** through temperature, humidity, CO₂, and light sensors—the instrument "breathes" with its surroundings
 - **Spectral/granular synthesis** engines running on embedded Linux for deep sound design
 - **Vacuum tube output stage** (Nutube 6P1) adds organic harmonic character
 - **Real-time sensor fusion** on dedicated microcontroller ensures deterministic, low-latency response
+- **Performer-controlled terroir depth**—from subtle room-breathing to wild environmental modulation (0-100%+)
 
-This is not a traditional MIDI controller—it's an instrument that breathes with you and adapts to its environment.
+This is not a traditional MIDI controller—it's a playable keyboard synthesizer with an optional "terroir layer" that captures the sonic character of each performance space.
 
 ---
 
@@ -63,10 +64,26 @@ This workspace coordinates six independent repositories:
 ## Hardware Platform
 
 - **Main Board:** Arduino UNO Q (Debian on application processor + STM32U585 microcontroller)
-- **Display:** DSI/HDMI
+- **Display:** 3.5-4.3" touchscreen OLED (DSI/SPI)
 - **Audio/MIDI:** Class-compliant USB
 - **Optional ML:** Coral USB accelerator
 - **Sensors:** I2C/UART/USB connected
+- **Power:** USB-C PD (12V @ 3A)
+- **Analog Stage:** Nutube 6P1 vacuum tube buffer
+
+### Product Vision
+
+**Standard Model (Sensor Node):**
+- Arduino UNO Q-based sensor-to-OSC/MIDI bridge
+- Sends hysteretic, weighted terroir data to DAW/existing synths
+- Integrates with Ableton, Max/MSP, VCV Rack, etc.
+- Accessible entry point (~$400-600 target)
+
+**Pro Model (Standalone Instrument):**
+- All-in-one synthesizer with onboard engines
+- Built-in terroir controls and ER file recording/playback
+- Hardware knobs, touchscreen UI, no computer required
+- Tour-ready performance instrument (~$1500-2500 target)
 
 ### Sensor Suite
 
@@ -91,29 +108,47 @@ This workspace coordinates six independent repositories:
 
 ## The "Living and Breathing" Philosophy
 
-Anima‑Locus is designed to feel **alive** through:
+Anima‑Locus is designed to feel **alive** through four core principles:
 
-1. **Environmental Responsiveness**
-   - Temperature, humidity, air quality, and light levels subtly modulate synthesis parameters
-   - Long slew rates and hysteresis prevent jarring changes—the instrument "breathes" slowly
-   - Creates evolving soundscapes that change with the room's atmosphere
+### 1. Environmental Responsiveness ("Sonic Terroir")
+- Temperature, humidity, CO₂, and atmospheric pressure create a unique "terroir" for each performance space
+- **Baseline calibration:** Capture the "quiet room" before the show, then modulate based on delta changes
+- As the crowd arrives, their breath (CO₂), warmth, and humidity subtly shift the sound
+- **Practical benefits:** Automatic room correction (HF boost when crowd absorbs sound, proximity effect compensation)
+- **Artistic benefits:** Non-reproducible character—each venue has its own sonic fingerprint
+- **Performer control:** Terroir depth from 0% (clean synth) to 100%+ (full environmental coupling)
+- Long slew rates and hysteresis prevent jarring changes—the instrument "breathes" slowly with the space
 
-2. **Gestural Intimacy**
-   - Hands-free control via mmWave radar (60–64 GHz) tracks baton/hand movements in 3D space
-   - Near-surface E-field sensing (MGC3130) detects proximity and gesture intention
-   - ToF depth imaging adds precise distance control
-   - Multiple mic arrays provide spatial awareness and voice/sound triggering
+### 2. Gestural Intimacy
+- Hands-free control via mmWave radar (60–64 GHz) tracks baton/hand movements in 3D space
+- Near-surface E-field sensing (MGC3130) detects proximity and gesture intention
+- ToF depth imaging adds precise distance control
+- Multiple mic arrays provide spatial awareness and voice/sound triggering
+- Fast response (<10ms) for expressive, immediate control
 
-3. **Organic Analog Stage**
-   - Real vacuum tube (Nutube 6P1) adds harmonic complexity impossible with digital processing
-   - Non-linear saturation responds dynamically to playing intensity
-   - The "warmth" is not emulation—it's physics
+### 3. Organic Analog Stage
+- Real vacuum tube (Nutube 6P1) adds harmonic complexity impossible with digital processing
+- Non-linear saturation responds dynamically to playing intensity
+- The "warmth" is not emulation—it's physics
+- Each tube has subtle variations—truly non-reproducible character
 
-4. **Hybrid Architecture**
-   - Digital precision for spectral/granular engines (Linux on quad-core ARM)
-   - Real-time determinism for sensor fusion (STM32 MCU with dedicated ISRs)
-   - Analog warmth for final output (vacuum tube buffer)
-   - "As analog as possible using digital parts"—the best of both worlds
+### 4. Hybrid Architecture
+- Digital precision for spectral/granular engines (Linux on quad-core ARM)
+- Real-time determinism for sensor fusion (STM32 MCU with dedicated ISRs)
+- Analog warmth for final output (vacuum tube buffer)
+- **"As analog as possible using digital parts"**—the best of both worlds
+
+### Environmental Response (ER) Files
+- Record the "aura" of great performances (timestamped sensor data)
+- Replay terroir from specific shows in the studio
+- Blend live + recorded terroir (60% live + 40% Brooklyn 2025-11-15)
+- Capture lightning in a bottle—make album versions with the energy of your best night
+
+### User Experience
+- **OP-1/Organelle-inspired interface:** Minimal menu diving, intuitive controls with modifiers
+- **Live-performance focused:** Muscle memory for critical controls (Terroir Depth knob, Baseline Set button)
+- **Real-time visualization:** Radial sensor delta display shows terroir activity at a glance
+- **Familiar foundation:** Works as a standard granular keyboard synth (terroir optional, not forced)
 
 ---
 
