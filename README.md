@@ -14,6 +14,11 @@ A **living and breathing digital spectral/granular keyboard synthesizer** that f
 
 This is not a traditional MIDI controller—it's a playable keyboard synthesizer with an optional "terroir layer" that captures the sonic character of each performance space.
 
+Who it’s for — short pitch:
+- Performing synth players who want a site‑specific character and expressive gestural controls
+- Live sound designers who want crowd‑aware correction and texture without manual EQ chains
+- Experimental composers who want reproducible "aura" captures for recording and composition
+
 ---
 
 ## Project Structure (Multi-Repository)
@@ -64,6 +69,8 @@ This workspace coordinates six independent repositories:
 ## Hardware Platform
 
 - **Main Board:** Arduino UNO Q (Debian on application processor + STM32U585 microcontroller)
+  - Note: the UNO Q is a hybrid System-on-Module + microcontroller platform: a Linux application processor runs Debian while the STM32 handles real-time sensing. UNO Q variants include a quad-core Cortex‑A53 SoC (typical 2.0 GHz) and memory options—2GB and a 4GB variant; the 4GB model is the recommended target for heavier spectral/granular DSP prototypes. UNO Q exposes onboard audio (JMISC) plus USB host on USB‑C; using a PD‑capable USB hub is required for many USB host audio devices. Also note the application processor uses some 1.8V GPIO domains while the MCU uses 3.3V; level shifting must be planned between these domains.
+  - Practical tip: use built‑in analog audio I/O for early demos then move to a class‑compliant USB audio interface for higher fidelity; prefer SAI/I2S via DMA on the MCU for strict timing when the design needs host‑independent audio streaming.
 - **Display:** 3.5-4.3" touchscreen OLED (DSI/SPI)
 - **Audio/MIDI:** Class-compliant USB
 - **Optional ML:** Coral USB accelerator
@@ -99,10 +106,19 @@ This workspace coordinates six independent repositories:
 - Thermal imaging
 - Ambient light sensor (ALS)
 
+**Implementation note (Standard vs Pro):**
+- For the first Standard Model prototype, we suggest a reduced sensor set (e.g., ToF + E-field + CO₂ + ALS) to reduce BOM cost and complexity. Save mmWave radar, thermal imaging, and full mic arrays for the Pro model unless the Standard BOM and market position justify them.
+
 **Analog Audio Path:**
 - **Nutube 6P1 vacuum tube buffer** (real triode, analog harmonic saturation)
 - Provides 2nd/3rd harmonic warmth and compression
 - The "living" element—organic, non-linear response
+
+**Nutube / Analog Cautions:**
+- The Nutube stage requires a dedicated filament/high-voltage supply and is sensitive to RF and mechanical microphonics. Keep the Nutube physically and electrically isolated from mmWave radars and radio modules, and place mechanical damping and shielding around the tube. The Nutube should be driven by an analog preamp stage, not directly from logic-level DAC outputs.
+
+## Terms & definitions — quick glossary
+- **Terroir:** bounded environmental modulation (RH / temperature / CO₂ / pressure / ALS) with long‑slew and hysteresis characteristics that create a venue‑specific sound fingerprint. Baseline calibration sets the "quiet room" state; `Terroir Depth` mixes the delta into DSP control buses.
 
 ---
 
@@ -126,6 +142,8 @@ Anima‑Locus is designed to feel **alive** through four core principles:
 - Multiple mic arrays provide spatial awareness and voice/sound triggering
 - Fast response (<10ms) for expressive, immediate control
 
+  - Determinism note: the end-to-end gesture → parameter path should target <10ms latency with bounded jitter. To support this, keep feature frames compact and deterministic; prefer MCU preprocessing, timestamped frames, and lockless FIFOs/ring buffers or shared RAM for Linux ↔ MCU transfers.
+
 ### 3. Organic Analog Stage
 - Real vacuum tube (Nutube 6P1) adds harmonic complexity impossible with digital processing
 - Non-linear saturation responds dynamically to playing intensity
@@ -140,6 +158,7 @@ Anima‑Locus is designed to feel **alive** through four core principles:
 
 ### Environmental Response (ER) Files
 - Record the "aura" of great performances (timestamped sensor data)
+  - **Privacy & retention:** ER Files are user‑triggered and opt‑in. Recordings should default to local device storage, be exportable as JSON or compressed binary archives, and include an optional consent flag if uploaded or shared.
 - Replay terroir from specific shows in the studio
 - Blend live + recorded terroir (60% live + 40% Brooklyn 2025-11-15)
 - Capture lightning in a bottle—make album versions with the energy of your best night
@@ -150,6 +169,16 @@ Anima‑Locus is designed to feel **alive** through four core principles:
 - **Real-time visualization:** Radial sensor delta display shows terroir activity at a glance
 - **Familiar foundation:** Works as a standard granular keyboard synth (terroir optional, not forced)
 
+### Conductor HUD
+The Conductor HUD is the single‑page live control experience for performers. It should provide:
+- Beat & Dynamics (tempo lock and energy view)
+- Four macros & XY pad for expressive control
+- Environment strip showing normalized terroir deltas (RH, CO₂, temp, ALS)
+- Beamforming DoA indicator for mic arrays (simple left / right / focus)
+- Baseline Set button and Terroir Depth control for quick performance resets
+
+Design principle: keep the HUD single‑screen and modifier‑driven to reduce onstage menu navigation.
+
 ---
 
 ### API-First Design
@@ -157,6 +186,8 @@ Anima‑Locus is designed to feel **alive** through four core principles:
 - REST API for presets/scenes
 - OpenAPI specification
 - Strongly typed SDKs (Python + TypeScript)
+ - OpenAPI+WS schemas: The `engine-ui/` repo will publish the contract (OpenAPI for REST and a stable JSON schema for WebSocket messages) used by `sdk-py` and `sdk-ts` for contract‑driven client implementations.
+  - Security note: `SECURITY.md` documents a temporary lack of auth in early prototypes — do not expose the engine WebSocket/REST APIs directly to untrusted networks. Plan for JWT/TLS integration in `engine-ui/` as soon as possible.
 
 ### Hybrid Compute Model
 - **Linux (Application Processor):** Audio engines, UI, heavy ML
@@ -165,6 +196,10 @@ Anima‑Locus is designed to feel **alive** through four core principles:
   - I2C scanning (1-10 Hz environment, 100-200 Hz IMU)
   - UART radar framing
   - CMSIS-NN/TFLM inference
+    - Link protocol implementation: the Linux ↔ MCU link is a critical design surface. Implement compact, timestamped binary frames and a ring-buffer or shared RAM handshake to support low-latency, bounded-jitter sensor delivery.
+      - Prefer SPI or UART with DMA for control/feature frames; use shared RAM + sequence numbers if the carrier exposes it for lockless transfer.
+      - Consider two link classes: (1) compact feature frames (10–200 bytes) at high cadence for gestures, (2) low‑rate environmental frames (2–20 bytes) for terroir. Audio streams may be streamed as fixed blocks over shared memory or left to the Linux side depending on the algorithm.
+      - Add a small benchmark suite in `mcu-stm32/` and `engine-ui/` to measure jitter, frame drops, and round-trip latency and tune buffer sizes and cadences.
 
 ### Determinism & Real-Time
 - Minimal ISR execution time
@@ -194,6 +229,7 @@ Anima‑Locus is designed to feel **alive** through four core principles:
 ### Defensive Publication
 - Concise, citable disclosure of sensor-fusion-to-audio methods
 - Establishes prior art for the community
+- See `docs-site/defensive-publication.md` for the published summary and citation guidance
 
 ---
 
@@ -251,6 +287,8 @@ See also:
 - **Deterministic control loop** on MCU (never block ISR)
 - **Rate-limited, debounced** sensor reads
 - **Long-slew, hysteretic** environmental parameter mapping (smooth, organic evolution)
+  - Mapping note: provide configurable smoothing and hysteresis kernels (exponentials, step-with-hysteresis) and record ER files for tuning; a reproducible dataset of ER recordings makes tuning simpler and safer.
+  - Bounds & defaults: target long-slew windows in the 30–120 second range for global tonal drift, clamp per-parameter impact (e.g., ±2–3 cents pitch, ±1–3 dB spectral tilt), and make Terroir Depth a single hardware control whose default center is the calibrated baseline.
 - **Bounded impact** on pitch/brightness/envelopes (environmental changes enhance, don't dominate)
 - **USB device multiplicity** (treat each USB device independently)
 - **Security:** Minimal dependencies, no secrets in repo, reproducible builds, SBOM generation
