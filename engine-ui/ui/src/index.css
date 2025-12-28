@@ -1,0 +1,65 @@
+:root {
+  /* Core Palette - Soul of the Place */
+  --color-bg: #050508;
+  --color-surface: #0f1115;
+  --color-surface-glass: rgba(15, 17, 21, 0.7);
+  
+  /* Elemental Accents */
+  --color-part-a: #ffcc00; /* Amber (Earth/Sun) */
+  --color-part-b: #00eeff; /* Cyan (Air) */
+  --color-part-c: #0077ff; /* Azure (Water) */
+  --color-part-d: #ff3366; /* Crimson (Fire) */
+  
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #8899aa;
+  
+  --glass-blur: blur(16px);
+  --border-radius: 12px;
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  overflow: hidden; /* App-like feel */
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utilities */
+.glass-panel {
+  background: var(--color-surface-glass);
+  backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--border-radius);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.title-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(to right, #fff, #8899aa);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
